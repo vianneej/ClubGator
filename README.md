@@ -1,9 +1,12 @@
 # ClubGator
-### Project manager: Viannee 
-### Frontend: Lu & Viannee
-### Backend: Josh & Kian
+###Contributors
 
-##Tech Stack
+*Project manager: Viannee*
+*Frontend: Lu & Viannee*
+*Backend: Josh & Kian*
+
+###Tech Stack
+
 - **Frontend:** React
 - **Game Engine:** Phaser.js
 - **Programming Language:** JavaScript
