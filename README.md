@@ -17,4 +17,4 @@
 - **Database Storage:** Cloud Firestore
 - **Version Control:** GitHub
 - **Development Environment:** Visual Studio Code
-- **Hosting:** Firebase Hosting
+- **Hosting:** Vercel
