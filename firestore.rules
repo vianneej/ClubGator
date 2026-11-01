@@ -7,6 +7,27 @@ service cloud.firestore {
     }
 
     match /penguins/{uid} {
+      function validAppearance() {
+        return request.resource.data.appearance is map
+          && request.resource.data.appearance.keys().hasAll([
+            'color', 'hat', 'glasses', 'outfit', 'accessory'
+          ])
+          && request.resource.data.appearance.keys().hasOnly([
+            'color', 'hat', 'glasses', 'outfit', 'accessory'
+          ])
+          && request.resource.data.appearance.color is string
+          && request.resource.data.appearance.color.size() > 0
+          && request.resource.data.appearance.color.size() <= 32
+          && request.resource.data.appearance.hat is string
+          && request.resource.data.appearance.hat.size() <= 32
+          && request.resource.data.appearance.glasses is string
+          && request.resource.data.appearance.glasses.size() <= 32
+          && request.resource.data.appearance.outfit is string
+          && request.resource.data.appearance.outfit.size() <= 32
+          && request.resource.data.appearance.accessory is string
+          && request.resource.data.appearance.accessory.size() <= 32;
+      }
+
       allow get: if signedIn() && request.auth.uid == uid;
 
       allow create: if signedIn()
@@ -19,8 +40,7 @@ service cloud.firestore {
           'ownerId', 'appearance', 'createdAt', 'schemaVersion'
         ])
         && request.resource.data.ownerId == uid
-        && request.resource.data.appearance is map
-        && request.resource.data.appearance.size() == 0
+        && validAppearance()
         && request.resource.data.createdAt == request.time
         && request.resource.data.schemaVersion is int
         && request.resource.data.schemaVersion == 1;

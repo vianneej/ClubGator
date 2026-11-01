@@ -1,4 +1,6 @@
 import { Scene } from 'phaser';
+import grassImg from '../../assets/grass_2d_strip_clean.png';
+import skyImg from '../../assets/sky_background.png';
 
 export class Preloader extends Scene
 {
@@ -29,18 +31,17 @@ export class Preloader extends Scene
 
     preload ()
     {
-        //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
-
         this.load.image('logo', 'logo.png');
+
+        // Absolute Vite URLs — clear path so it is not prefixed with "assets/"
+        this.load.setPath('');
+        this.load.image('sky', skyImg);
+        this.load.image('grass', grassImg);
     }
 
     create ()
     {
-        //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
-        //  For example, you can define global animations here, so we can use them in other scenes.
-
-        //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         this.scene.start('MainMenu');
     }
 }

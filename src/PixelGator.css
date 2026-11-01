@@ -1,11 +1,12 @@
 
 .pixel-gator {
   position: absolute;
-  bottom: 0;
-  left: 50%;
+  bottom: calc(var(--ground-h, 150px) - 12px);
+  left: 72%;
   transform: translateX(-50%);
-  z-index: 10;
+  z-index: 1;
   animation: gatorBounce 1s steps(2, end) infinite;
+  pointer-events: none;
 }
 
 .pixel-gator-image {
