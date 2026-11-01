@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Tower from "./Tower";
+import GrassGround from "./GrassGround";
 import "./RegisterPage.css";
 const EMPTY = { username: "", email: "", password: "", confirm: "" };
 const FIELDS = [
@@ -83,7 +83,6 @@ export default function RegisterPage({ onRegister, onSwitchToLogin }) {
 
   return (
     <main className="cg-scene">
-      <Tower />
       <section className="cg-content">
         <p className="cg-welcome">welcome to...</p>
         <h1 className="cg-title">Club Gator</h1>
@@ -130,7 +129,7 @@ export default function RegisterPage({ onRegister, onSwitchToLogin }) {
         </form>
       </section>
 
-      <div className="cg-ground" aria-hidden="true" />
+      <GrassGround />
     </main>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Tower from "./Tower";
+import GrassGround from "./GrassGround";
 import "./RegisterPage.css"; // same colour scheme
 const EMPTY = { email: "", password: "" };
 import PixelGator from "../PixelGator";
@@ -53,8 +53,6 @@ export default function LoginPage({ onLogin, onSwitchToRegister }) {
   };
   return (
     <main className="cg-scene">
-      <Tower />
-
       <section className="cg-content">
         <p className="cg-welcome">welcome back to...</p>
         <h1 className="cg-title">Club Gator</h1>
@@ -111,8 +109,8 @@ export default function LoginPage({ onLogin, onSwitchToRegister }) {
             </p>
           </form>
         </section>
-        <PixelGator/>
-        <div className="cg-ground" aria-hidden="true" />
+        <PixelGator />
+        <GrassGround />
       </main>
     );
   }

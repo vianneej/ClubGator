@@ -9,8 +9,23 @@ Players can create and read only their own penguin.
 Repeated creation requests preserve the existing document.
 Updates, deletion, and collection listing are currently denied.
 
-Integration:
-The character creation screen should call createPenguin() from src/services/penguinService.js after the player logs in.
+## Appearance
+appearance: {
+  color: string,      // catalog colour id, e.g. "green"
+  hat: string,        // item id, empty string if no id
+  glasses: string,
+  outfit: string,
+  accessory: string
+}
+Catalog source: `src/data/appearanceCatalog.js`
+## Integration
 
-Pending:
-Agree on appearance options and assets, extend validation and rules, connect the character screen, and test saving and reloading.
+After login, if no penguin document exists, the app shows
+`CustomisationMenu`. Confirming a look calls
+`createPenguin(appearance)` from `src/services/penguinService.js`,
+then the campus map loads.
+
+## Pending
+- Swap placeholder swatches for real hat / glasses / outfit / accessory art
+- Layer cosmetics onto the gator preview
+- Optional later: allow appearance updates after creation
