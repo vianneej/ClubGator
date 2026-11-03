@@ -15,19 +15,23 @@ import "./CustomisationMenu.css";
 
 export default function CustomisationMenu({
   username,
+  initialAppearance,
   onConfirm,
   onBack,
   onLogout,
   submitting = false,
   error = "",
 }) {
-  const [appearance, setAppearance] = useState(getDefaultAppearance);
+  const [appearance, setAppearance] = useState(
+  () => initialAppearance ?? getDefaultAppearance()
+  );
   const [categoryId, setCategoryId] = useState("hat");
   const [page, setPage] = useState(0);
   const [previewSrc, setPreviewSrc] = useState(gatorSrc);
   const category = CATEGORIES.find((c) => c.id === categoryId) ?? CATEGORIES[0];
   const items = CATALOG[categoryId] ?? [];
   const pageCount = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
+  
 
   const pageItems = useMemo(() => {
     const slice = items.slice(

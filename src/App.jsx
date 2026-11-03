@@ -15,6 +15,7 @@ import {
 import {
   getPlayerPenguin,
   createPenguin,
+  savePenguinAppearance,
   hasSavedLook,
   normalizeAppearance,
 } from "./services/penguinService";
@@ -131,8 +132,13 @@ export default function App() {
     setPenguinError("");
 
     try {
+    if (hasSavedLook(penguin)) {
+      const savedAppearance = await savePenguinAppearance(appearance);
+      setPenguin({ ...penguin, appearance: savedAppearance });
+    } else {
       const saved = await createPenguin(normalizeAppearance(appearance));
       setPenguin(saved);
+    }
       setScreen("map");
     } catch {
       setPenguinError("Couldn't save your look. Please try again.");
@@ -153,7 +159,19 @@ export default function App() {
           textAlign: "center",
         }}
       >
-        <p role="status" style={{ margin: 0, color: "white", fontSize: "1.2rem" }}>
+        <p
+          role="status"
+          style={{
+            position: "fixed",
+            inset: 0,
+            display: "grid",
+            placeItems: "center",
+            margin: 0,
+            color: "white",
+            fontSize: "1.2rem",
+            textAlign: "center",
+          }}
+        >
           Loading Club Gator...
         </p>
       </main>
@@ -219,6 +237,7 @@ export default function App() {
           onLogout={handleLogout}
           submitting={creatingPenguin}
           error={penguinError}
+          initialAppearance={hasSavedLook(penguin) ? penguin.appearance : undefined}
         />
       );
     }
@@ -313,6 +332,18 @@ export default function App() {
               >
                 Enter campus
               </button>
+              {hasSavedLook(penguin) && (
+              <button
+                className="cg-button"
+                type="button"
+                onClick={() => {
+                   setPenguinError("");
+                   setScreen("customise");
+                }}
+              >
+                Change look
+              </button>
+              )}
               <button
                 className="cg-button"
                 type="button"
