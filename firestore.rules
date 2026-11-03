@@ -44,7 +44,17 @@ service cloud.firestore {
         && request.resource.data.createdAt == request.time
         && request.resource.data.schemaVersion is int
         && request.resource.data.schemaVersion == 1;
+
+      allow update: if signedIn()
+        && request.auth.uid == uid
+        && resource.data.ownerId == uid
+        && resource.data.appearance == {}
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['appearance'])
+        && validAppearance();
     }
+
+
 
     match /users/{uid} {
       allow get: if signedIn() && request.auth.uid == uid;

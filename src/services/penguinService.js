@@ -60,7 +60,14 @@ export async function createPenguin(appearanceInput) {
 
     // repeated submissions return current penguin
     if (penguinSnapshot.exists()) {
-      return penguinSnapshot.data();
+      const existing = penguinSnapshot.data();
+
+      if (hasSavedLook(existing)) {
+        return existing;
+      }
+
+      transaction.update(penguinRef, { appearance });
+      return { ...existing, appearance };
     }
 
     const penguin = {

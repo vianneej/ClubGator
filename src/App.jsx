@@ -126,37 +126,16 @@ export default function App() {
 
   async function handleConfirmAppearance(appearance) {
     if (creatingPenguin) return;
+
     setCreatingPenguin(true);
     setPenguinError("");
 
-    const normalized = normalizeAppearance(appearance);
-
     try {
-      const saved = await createPenguin(normalized);
-
-      // Older empty starter docs are returned as-is; keep the chosen look in
-      // session so the frontend flow still reaches the map.
-      if (hasSavedLook(saved)) {
-        setPenguin(saved);
-      } else {
-        setPenguin({
-          ...(saved || {}),
-          appearance: normalized,
-          schemaVersion: saved?.schemaVersion ?? 1,
-        });
-      }
+      const saved = await createPenguin(normalizeAppearance(appearance));
+      setPenguin(saved);
       setScreen("map");
     } catch {
-      // Frontend can still preview the flow if Firestore create is blocked.
-      setPenguin({
-        ownerId: session.user?.uid,
-        appearance: normalized,
-        schemaVersion: 1,
-      });
-      setPenguinError(
-        "Couldn't sync your look yet — continuing with this session."
-      );
-      setScreen("map");
+      setPenguinError("Couldn't save your look. Please try again.");
     } finally {
       setCreatingPenguin(false);
     }
@@ -164,8 +143,19 @@ export default function App() {
 
   if (loading) {
     return (
-      <main className="cg-scene" style={{ display: "grid", placeItems: "center" }}>
-        <p style={{ color: "white", fontSize: "1.2rem" }}>Loading Club Gator...</p>
+      <main
+        className="cg-scene"
+        style={{
+          display: "grid",
+          placeItems: "center",
+          minHeight: "100dvh",
+          padding: "16px",
+          textAlign: "center",
+        }}
+      >
+        <p role="status" style={{ margin: 0, color: "white", fontSize: "1.2rem" }}>
+          Loading Club Gator...
+        </p>
       </main>
     );
   }
