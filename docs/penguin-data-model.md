@@ -18,6 +18,25 @@ appearance: {
   accessory: string
 }
 Catalog source: `src/data/appearanceCatalog.js`
+
+## Wardrobe storage
+
+The penguin document at `penguins/{uid}` stores what the player is
+currently wearing in `appearance`: `color`, `hat`, `glasses`,
+`outfit`, and `accessory`. An empty equipment slot means nothing
+is equipped in that slot.
+
+Owned items are stored separately at
+`penguins/{uid}/ownedItems/{itemKey}`. Each document records the
+item's catalog ID and slot. Use a stable key such as `hat:beanie`
+so the same item cannot be granted twice.
+
+Body color remains an appearance choice. For equipment, the
+player may clear a slot or equip a catalog item they own.
+Existing penguins keep their saved appearance. Before enforcing
+ownership on wardrobe edits, decide which items are free starters
+and how existing selections receive ownership records.
+
 ## Integration
 
 After login, if no penguin document exists, the app shows

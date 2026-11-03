@@ -3,6 +3,7 @@ import {
   getDoc,
   runTransaction,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import {
@@ -60,7 +61,14 @@ export async function createPenguin(appearanceInput) {
 
     // repeated submissions return current penguin
     if (penguinSnapshot.exists()) {
-      return penguinSnapshot.data();
+      const existing = penguinSnapshot.data();
+
+      if (hasSavedLook(existing)) {
+        return existing;
+      }
+
+      transaction.update(penguinRef, { appearance });
+      return { ...existing, appearance };
     }
 
     const penguin = {
@@ -83,7 +91,7 @@ export async function getPlayerPenguin(uid) {
   return snap.exists() ? snap.data() : null;
 }
 
-/** true when penguin exists as a save */
+// true when penguin exists as a save 
 export function hasSavedLook(penguin) {
   if (!penguin || typeof penguin !== "object") return false;
   const appearance = penguin.appearance;
@@ -93,4 +101,18 @@ export function hasSavedLook(penguin) {
     appearance.color.length > 0 &&
     COLOR_IDS.has(appearance.color)
   );
+}
+
+//save wardrobe changes for returning players
+export async function savePenguinAppearance(input) {
+  await auth.authStateReady();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("Log in before saving your look.");
+  }
+
+  const appearance = normalizeAppearance(input);
+  await updateDoc(doc(db, "penguins", user.uid), { appearance });
+  return appearance;
 }
