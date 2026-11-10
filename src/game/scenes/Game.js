@@ -63,6 +63,8 @@ export class Game extends Scene
                 marker.on('pointerover', () => {
                     marker.setScale(1.3);
                     marker.setFillStyle(0x38bdf8);
+                    infoText.setText(`${place.name}: ${place.description}`);
+                    infoText.setStyle({ color: '#fde047' });
                 });
 
                 marker.on('pointerout', () => {
@@ -71,8 +73,7 @@ export class Game extends Scene
                 });
 
                 marker.on('pointerdown', () => {
-                    infoText.setText(`[${place.id}] ${place.name}: ${place.description}`);
-                    infoText.setStyle({ color: '#fde047' });
+                    this.scene.start('LocationScene', { landmarkId: place.id });
                 });
             });
         } catch (error) {
