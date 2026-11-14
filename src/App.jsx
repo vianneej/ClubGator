@@ -244,38 +244,21 @@ export default function App() {
 
     if (screen === "map") {
       return (
-        <main
-          className="cg-scene"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            minHeight: "100vh",
-            overflowY: "auto",
-            padding: "2rem 1rem",
-            color: "white",
-          }}
-        >
-          <section
-            className="cg-panel"
-            style={{
-              textAlign: "center",
-              width: "100%",
-              maxWidth: "420px",
-              marginBottom: "1rem",
-            }}
-          >
-            <h2 className="cg-panel-title">Campus map</h2>
-            <p style={{ margin: "0.5rem 0 1rem" }}>
-              Playing as{" "}
-              <strong>{session.profile?.username || session.user.email}</strong>
-            </p>
-            {penguinError && (
-              <p className="cg-error" role="alert" style={{ marginBottom: "1rem" }}>
-                {penguinError}
-              </p>
-            )}
-            <div style={{ display: "grid", gap: "12px" }}>
+        <main className="cg-game-view">
+          <PhaserGame />
+          <section className="cg-game-toolbar" aria-label="Game controls">
+            <div className="cg-game-account">
+              <span>
+                Playing as{" "}
+                <strong>{session.profile?.username || session.user.email}</strong>
+              </span>
+              {penguinError && (
+                <p className="cg-error" role="alert">
+                  {penguinError}
+                </p>
+              )}
+            </div>
+            <div className="cg-game-actions">
               <button
                 className="cg-button"
                 type="button"
@@ -284,16 +267,14 @@ export default function App() {
                 Back to hub
               </button>
               <button
-                className="cg-button"
+                className="cg-button cg-game-logout"
                 type="button"
-                style={{ background: "#475569" }}
                 onClick={handleLogout}
               >
                 Log out
               </button>
             </div>
           </section>
-          <PhaserGame />
         </main>
       );
     }
