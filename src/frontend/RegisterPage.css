@@ -70,6 +70,72 @@
   font-weight: 600;
 }
 
+.cg-game-view {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+  font-family: "Pixelify Sans", system-ui, sans-serif;
+}
+
+.cg-game-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cg-game-toolbar {
+  position: absolute;
+  z-index: 1;
+  inset: 16px 16px auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--paper);
+  pointer-events: none;
+}
+
+.cg-game-account,
+.cg-game-actions {
+  padding: 12px;
+  background: rgb(49 30 23 / 88%);
+  box-shadow: 0 4px 0 rgb(0 0 0 / 25%);
+  pointer-events: auto;
+}
+
+.cg-game-account {
+  max-width: min(60vw, 420px);
+}
+
+.cg-game-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.cg-game-actions .cg-button {
+  width: auto;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 1rem;
+}
+
+.cg-game-actions .cg-game-logout {
+  color: var(--paper);
+  background: #475569;
+  border-color: #334155;
+  box-shadow: 0 5px 0 #334155;
+}
+
+.cg-game-actions .cg-game-logout:active:not(:disabled) {
+  box-shadow: 0 1px 0 #334155;
+}
+
+.cg-game-account .cg-error {
+  margin-bottom: 0;
+}
+
 .cg-field { margin-bottom: 14px; }
 
 .cg-field label {
@@ -172,5 +238,24 @@
 @media (max-width: 900px) {
   .cg-scene {
     --ground-h: 120px;
+  }
+
+  .cg-game-toolbar {
+    inset: 10px 10px auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .cg-game-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cg-game-account {
+    max-width: none;
+  }
+
+  .cg-game-actions {
+    align-self: flex-end;
   }
 }

@@ -15,7 +15,7 @@ export default function PhaserGame() {
     <div
       ref={containerRef}
       id="game-container"
-      style={{ width: "100%", maxWidth: 1024, aspectRatio: "1024 / 768" }}
+      className="cg-game-canvas"
     />
   );
 }
