@@ -1,6 +1,11 @@
 import { Scene } from 'phaser';
 import grassImg from '../../assets/grass_2d_strip_clean.png';
 import skyImg from '../../assets/sky_background.png';
+import gatorStandingImg from '../../assets/GatorStanding.png';
+import gatorLeft1Img from '../../assets/GatorLeft1.png';
+import gatorLeft2Img from '../../assets/GatorLeft2.png';
+import gatorRight1Img from '../../assets/GatorRight1.png';
+import gatorRight2Img from '../../assets/GatorRight2.png';
 
 export class Preloader extends Scene
 {
@@ -38,6 +43,11 @@ export class Preloader extends Scene
         this.load.setPath('');
         this.load.image('sky', skyImg);
         this.load.image('grass', grassImg);
+        this.load.image('gator-standing', gatorStandingImg);
+        this.load.image('gator-left-1', gatorLeft1Img);
+        this.load.image('gator-left-2', gatorLeft2Img);
+        this.load.image('gator-right-1', gatorRight1Img);
+        this.load.image('gator-right-2', gatorRight2Img);
     }
 
     create ()

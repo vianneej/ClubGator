@@ -24,6 +24,8 @@ export class Game extends Scene
                 .setDepth(1);
             const grassScale = width / grass.width;
             grass.setScale(grassScale);
+            const grassDisplayHeight = grass.height * grassScale;
+            this.grassTopY = height - grassDisplayHeight + (470 / 540) * grassDisplayHeight;
         }
     }
 
@@ -36,6 +38,8 @@ export class Game extends Scene
             color: '#f97316',
             fontStyle: 'bold'
         }).setDepth(10);
+
+        this.createGator();
 
         const infoText = this.add.text(512, 720, 'Click any UF landmark to explore campus in detail!', {
             fontFamily: 'Arial',
@@ -78,6 +82,109 @@ export class Game extends Scene
             });
         } catch (error) {
             console.error("Failed to load landmarks into Phaser scene:", error);
+        }
+    }
+
+    createGator ()
+    {
+        if (!this.anims.exists('gator-walk-left')) {
+            this.anims.create({
+                key: 'gator-walk-left',
+                frames: [
+                    { key: 'gator-left-1' },
+                    { key: 'gator-left-2' }
+                ],
+                frameRate: 8,
+                repeat: -1
+            });
+        }
+
+        if (!this.anims.exists('gator-walk-right')) {
+            this.anims.create({
+                key: 'gator-walk-right',
+                frames: [
+                    { key: 'gator-right-1' },
+                    { key: 'gator-right-2' }
+                ],
+                frameRate: 8,
+                repeat: -1
+            });
+        }
+
+        const groundY = this.grassTopY ?? 650;
+        this.gator = this.add.sprite(512, groundY, 'gator-standing')
+            .setOrigin(0.5, 1)
+            .setScale(0.11)
+            .setDepth(6);
+        this.gatorDisplayWidth = this.gator.displayWidth;
+        this.gatorDisplayHeight = this.gator.displayHeight;
+        this.setGatorDisplaySize();
+
+        this.gatorFacing = 'right';
+        this.gatorIsWalking = false;
+
+        this.gatorKeys = this.input.keyboard.addKeys({
+            up: 'W',
+            down: 'S',
+            left: 'A',
+            right: 'D',
+            upArrow: 'UP',
+            downArrow: 'DOWN',
+            leftArrow: 'LEFT',
+            rightArrow: 'RIGHT'
+        });
+    }
+
+    setGatorDisplaySize ()
+    {
+        if (!this.gator) {
+            return;
+        }
+        this.gator.setOrigin(0.5, 1);
+        this.gator.setDisplaySize(this.gatorDisplayWidth, this.gatorDisplayHeight);
+    }
+
+    update (time, delta)
+    {
+        if (!this.gator || !this.gatorKeys) {
+            return;
+        }
+
+        let dx = 0;
+        if (this.gatorKeys.left.isDown || this.gatorKeys.leftArrow.isDown) {
+            dx -= 1;
+        }
+        if (this.gatorKeys.right.isDown || this.gatorKeys.rightArrow.isDown) {
+            dx += 1;
+        }
+
+        if (dx !== 0) {
+            const speed = 180;
+            this.gator.x += dx * speed * (delta / 1000);
+            this.gator.y = this.grassTopY ?? 650;
+
+            const halfWidth = (this.gator.displayWidth / 2);
+            this.gator.x = Math.max(halfWidth, Math.min(this.scale.width - halfWidth, this.gator.x));
+
+            if (dx < 0) {
+                this.gatorFacing = 'left';
+            } else if (dx > 0) {
+                this.gatorFacing = 'right';
+            }
+
+            const animationKey = this.gatorFacing === 'left'
+                ? 'gator-walk-left'
+                : 'gator-walk-right';
+            if (!this.gator.anims.isPlaying || this.gator.anims.currentAnim?.key !== animationKey) {
+                this.gator.play(animationKey);
+            }
+            this.setGatorDisplaySize();
+            this.gatorIsWalking = true;
+        } else if (this.gatorIsWalking) {
+            this.gator.anims.stop();
+            this.gator.setTexture('gator-standing');
+            this.setGatorDisplaySize();
+            this.gatorIsWalking = false;
         }
     }
 }
