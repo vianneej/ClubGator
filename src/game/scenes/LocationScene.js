@@ -11,6 +11,7 @@ export class LocationScene extends Scene {
     }
 
     async create() {
+        this.game.events.emit('chat-room-change', `location:${this.landmarkId}`);
         const { width, height } = this.scale;
 
         // Clean sky background
