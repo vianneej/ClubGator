@@ -101,6 +101,59 @@ service cloud.firestore {
       allow write: if signedIn();
     }
 
+    function chatProfile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function validChatRoom(roomId) {
+      return roomId is string && (
+        roomId == 'campus' || (
+          roomId.matches('location:[^/]+')
+          && exists(
+            /databases/$(database)/documents/landmarks/$(roomId.replace('^location:', ''))
+          )
+        )
+      );
+    }
+
+    match /chatSessions/{uid} {
+      function ownsChatSession() {
+        return signedIn() && request.auth.uid == uid && chatProfile().role == 'player';
+      }
+
+      allow get: if ownsChatSession();
+
+      allow create, update: if ownsChatSession()
+        && request.resource.data.keys().hasOnly(['roomId', 'updatedAt'])
+        && validChatRoom(request.resource.data.roomId)
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    match /chatRooms/{roomId}/messages/{messageId} {
+      function inChatRoom() {
+        return signedIn()
+          && chatProfile().role == 'player'
+          && validChatRoom(roomId)
+          && get(
+            /databases/$(database)/documents/chatSessions/$(request.auth.uid)
+          ).data.roomId == roomId;
+      }
+
+      allow get: if inChatRoom();
+      allow list: if inChatRoom() && request.query.limit <= 50;
+
+      allow create: if inChatRoom()
+        && request.resource.data.keys().hasOnly([
+          'senderUid', 'senderUsername', 'text', 'createdAt'
+        ])
+        && request.resource.data.senderUid == request.auth.uid
+        && request.resource.data.senderUsername == chatProfile().username
+        && request.resource.data.text is string
+        && request.resource.data.text.size() <= 300
+        && request.resource.data.text.matches('(?s).*[^\\s\\p{Z}\\x{0085}\\x{FEFF}\\x{000B}].*')
+        && request.resource.data.createdAt == request.time;
+    }
+
     match /friendRequests/{requestId} {
       allow read: if request.auth != null && (
         resource.data.fromUid == request.auth.uid ||

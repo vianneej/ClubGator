@@ -31,6 +31,7 @@ export class Game extends Scene
 
     async create ()
     {
+        this.game.events.emit('chat-room-change', 'campus');
         this.createCampusBackdrop();
         this.add.text(30, 25, 'ClubGator Map', {
             fontFamily: 'Arial',

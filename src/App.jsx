@@ -245,8 +245,7 @@ export default function App() {
     if (screen === "map") {
       return (
         <main className="cg-game-view">
-          <PhaserGame />
-          <section className="cg-game-toolbar" aria-label="Game controls">
+          <PhaserGame key={session.user.uid} uid={session.user.uid}>
             <div className="cg-game-account">
               <span>
                 Playing as{" "}
@@ -258,7 +257,7 @@ export default function App() {
                 </p>
               )}
             </div>
-            <div className="cg-game-actions">
+            <section className="cg-game-actions" aria-label="Game controls">
               <button
                 className="cg-button"
                 type="button"
@@ -273,8 +272,8 @@ export default function App() {
               >
                 Log out
               </button>
-            </div>
-          </section>
+            </section>
+          </PhaserGame>
         </main>
       );
     }
