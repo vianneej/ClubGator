@@ -33,12 +33,7 @@ export class Game extends Scene
     {
         this.game.events.emit('chat-room-change', 'campus');
         this.createCampusBackdrop();
-        this.add.text(30, 25, 'ClubGator Map', {
-            fontFamily: 'Arial',
-            fontSize: 24,
-            color: '#f97316',
-            fontStyle: 'bold'
-        }).setDepth(10);
+        this.createMapButton();
 
         this.createGator();
 
@@ -84,6 +79,114 @@ export class Game extends Scene
         } catch (error) {
             console.error("Failed to load landmarks into Phaser scene:", error);
         }
+    }
+
+    createMapButton ()
+    {
+        const button = this.add.container(100, 38).setDepth(20);
+
+        const background = this.add.rectangle(0, 0, 172, 38, 0x0021A5)
+            .setInteractive({ useHandCursor: true });
+        const label = this.add.text(0, 0, 'View Campus Map', {
+            fontFamily: 'Pixelify Sans, sans-serif',
+            fontSize: 18,
+            color: '#ffffff'
+        }).setOrigin(0.5);
+
+        button.add([background, label]);
+        background.on('pointerover', () => label.setColor('#ffbb00'));
+        background.on('pointerout', () => label.setColor('#ffffff'));
+        background.on('pointerdown', () => this.openCampusMap());
+    }
+
+    openCampusMap ()
+    {
+        if (this.mapPopup) {
+            return;
+        }
+
+        const { width, height } = this.scale;
+        this.mapPopup = this.add.container(0, 0).setDepth(100);
+
+        const backdrop = this.add.rectangle(width / 2, height / 2, width, height, 0x5cc2f2, 0.78)
+            .setInteractive();
+        const panel = this.add.rectangle(width / 2, height / 2, 820, 610, 0x5cc2f2)
+            .setStrokeStyle(5, 0x0021A5);
+        const header = this.add.rectangle(width / 2, height / 2 - 265, 820, 80, 0x0021A5)
+            .setOrigin(0.5);
+        const title = this.add.text(width / 2 - 390, height / 2 - 265, 'Campus Map', {
+            fontFamily: 'Press Start 2P, monospace',
+            fontSize: 20,
+            color: '#ffffff',
+            fontStyle: 'bold'
+        }).setOrigin(0, 0.5);
+
+        this.mapPopup.add([backdrop, panel, header, title]);
+
+        if (this.textures.exists('campus-map')) {
+            const mapImage = this.add.image(width / 2, height / 2 + 35, 'campus-map')
+                .setDisplaySize(760, 500)
+                .setOrigin(0.5);
+            this.mapPopup.add(mapImage);
+        } else {
+            const mapPlaceholder = this.add.rectangle(width / 2, height / 2 + 35, 760, 500, 0x5cc2f2)
+                .setStrokeStyle(4, 0xf97316)
+                .setFillStyle(0x5cc2f2);
+            const placeholderTitle = this.add.text(width / 2, height / 2 - 5,
+                'Campus Map', {
+                    fontFamily: 'Press Start 2P, monospace',
+                    fontSize: 22,
+                    color: '#ffbb00',
+                    fontStyle: 'bold'
+                }).setOrigin(0.5);
+            const placeholderText = this.add.text(width / 2, height / 2 + 38,
+                'Map image coming soon', {
+                    fontFamily: 'Pixelify Sans, monospace',
+                    fontSize: 20,
+                    color: '#ffffff'
+                }).setOrigin(0.5);
+            this.mapPopup.add([mapPlaceholder, placeholderTitle, placeholderText]);
+        }
+
+        const closeButton = this.add.container(width / 2 + 372, height / 2 - 265);
+        const closeBackground = this.add.circle(0, 0, 20, 0xf97316)
+            .setStrokeStyle(3, 0xffffff)
+            .setInteractive({ useHandCursor: true });
+        const closeLabel = this.add.text(0, 0, 'X', {
+            fontFamily: 'Press Start 2P, monospace',
+            fontSize: 18,
+            color: '#ffffff',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+        closeButton.add([closeBackground, closeLabel]);
+        closeBackground.on('pointerover', () => closeLabel.setColor('#ffbb00'));
+        closeBackground.on('pointerout', () => closeLabel.setColor('#ffffff'));
+        closeBackground.on('pointerdown', () => this.closeCampusMap());
+        this.mapPopup.add(closeButton);
+
+        backdrop.on('pointerdown', (pointer, localX, localY, event) => {
+            if (pointer && event) {
+                event.stopPropagation();
+            }
+            this.closeCampusMap();
+        });
+
+        this.mapEscapeHandler = () => this.closeCampusMap();
+        this.input.keyboard.on('keydown-ESC', this.mapEscapeHandler);
+    }
+
+    closeCampusMap ()
+    {
+        if (!this.mapPopup) {
+            return;
+        }
+
+        if (this.mapEscapeHandler) {
+            this.input.keyboard.off('keydown-ESC', this.mapEscapeHandler);
+            this.mapEscapeHandler = null;
+        }
+        this.mapPopup.destroy(true);
+        this.mapPopup = null;
     }
 
     createGator ()
@@ -147,7 +250,7 @@ export class Game extends Scene
 
     update (time, delta)
     {
-        if (!this.gator || !this.gatorKeys) {
+        if (!this.gator || !this.gatorKeys || this.mapPopup) {
             return;
         }
 
