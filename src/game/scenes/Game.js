@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { getLandmarks } from "../../services/landmarkService";
+import { createPixelButton, playTransitionIn, playTransitionOut } from '../utils/pixelUi';
 
 export class Game extends Scene
 {
@@ -31,9 +32,11 @@ export class Game extends Scene
 
     async create ()
     {
+        this._isTransitioning = false;
         this.game.events.emit('chat-room-change', 'campus');
         this.createCampusBackdrop();
         this.createMapButton();
+        playTransitionIn(this);
 
         this.createGator();
 
@@ -73,7 +76,13 @@ export class Game extends Scene
                 });
 
                 marker.on('pointerdown', () => {
-                    this.scene.start('LocationScene', { landmarkId: place.id });
+                    playTransitionOut(this, () => {
+                        this.scene.start('LoadingScene', {
+                            targetScene: 'LocationScene',
+                            targetData: { landmarkId: place.id },
+                            subtitle: place.name
+                        });
+                    });
                 });
             });
         } catch (error) {
@@ -83,20 +92,14 @@ export class Game extends Scene
 
     createMapButton ()
     {
-        const button = this.add.container(100, 38).setDepth(20);
-
-        const background = this.add.rectangle(0, 0, 172, 38, 0x0021A5)
-            .setInteractive({ useHandCursor: true });
-        const label = this.add.text(0, 0, 'View Campus Map', {
-            fontFamily: 'Pixelify Sans, sans-serif',
-            fontSize: 18,
-            color: '#ffffff'
-        }).setOrigin(0.5);
-
-        button.add([background, label]);
-        background.on('pointerover', () => label.setColor('#ffbb00'));
-        background.on('pointerout', () => label.setColor('#ffffff'));
-        background.on('pointerdown', () => this.openCampusMap());
+        createPixelButton(this, 118, 40, 'CAMPUS MAP', {
+            variant: 'blue',
+            width: 186,
+            height: 42,
+            fontSize: 13,
+            depth: 20,
+            onClick: () => this.openCampusMap()
+        });
     }
 
     openCampusMap ()
@@ -148,20 +151,13 @@ export class Game extends Scene
             this.mapPopup.add([mapPlaceholder, placeholderTitle, placeholderText]);
         }
 
-        const closeButton = this.add.container(width / 2 + 372, height / 2 - 265);
-        const closeBackground = this.add.circle(0, 0, 20, 0xf97316)
-            .setStrokeStyle(3, 0xffffff)
-            .setInteractive({ useHandCursor: true });
-        const closeLabel = this.add.text(0, 0, 'X', {
-            fontFamily: 'Press Start 2P, monospace',
-            fontSize: 18,
-            color: '#ffffff',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
-        closeButton.add([closeBackground, closeLabel]);
-        closeBackground.on('pointerover', () => closeLabel.setColor('#ffbb00'));
-        closeBackground.on('pointerout', () => closeLabel.setColor('#ffffff'));
-        closeBackground.on('pointerdown', () => this.closeCampusMap());
+        const closeButton = createPixelButton(this, width / 2 + 372, height / 2 - 265, 'X', {
+            variant: 'orange',
+            width: 42,
+            height: 42,
+            fontSize: 16,
+            onClick: () => this.closeCampusMap()
+        });
         this.mapPopup.add(closeButton);
 
         backdrop.on('pointerdown', (pointer, localX, localY, event) => {

@@ -54,19 +54,5 @@ export const campusLandmarks = [
         x: 120,
         y: 510,
         description: "On-campus wildlife preserve home to campus alligators and the world's largest occupied bat houses."
-    },
-    {
-        id: "turlington-plaza",
-        name: "Turlington Plaza",
-        x: 470,
-        y: 310,
-        description: "The busy central pedestrian crossroads. Meet with friends or talk to students tabling for clubs."
-    },
-    {
-        id: "southwest-rec",
-        name: "Southwest Recreation Center",
-        x: 150,
-        y: 560,
-        description: "SW Rec, UF's main gym. Work out, get some cardio in, or play a sport like basketball, tennis, and more."
     }
 ];
