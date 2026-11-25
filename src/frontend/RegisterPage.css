@@ -181,19 +181,27 @@
   margin-top: 4px;
   padding: 12px;
   font: inherit;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--wood);
   background: var(--grass-light);
-  border: 3px solid var(--grass);
+  border: 3px solid #2d5a20;
   border-radius: 0;
-  box-shadow: 0 5px 0 0 var(--grass);
+  box-shadow:
+    inset 3px 3px 0 0 rgba(255, 255, 255, 0.45),
+    inset -3px -3px 0 0 rgba(0, 0, 0, 0.2),
+    0 5px 0 0 var(--grass);
   cursor: pointer;
 }
 
 .cg-button:active:not(:disabled) {
   transform: translateY(4px);
-  box-shadow: 0 1px 0 0 var(--grass);
+  box-shadow:
+    inset 3px 3px 0 0 rgba(0, 0, 0, 0.2),
+    inset -3px -3px 0 0 rgba(255, 255, 255, 0.35),
+    0 1px 0 0 var(--grass);
 }
 
 .cg-button:disabled { opacity: 0.7; cursor: wait; }

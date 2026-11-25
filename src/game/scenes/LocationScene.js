@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { getLandmarkById } from '../../services/landmarkService';
+import { createPixelButton, playTransitionIn, playTransitionOut } from '../utils/pixelUi';
 
 export class LocationScene extends Scene {
     constructor() {
@@ -11,11 +12,10 @@ export class LocationScene extends Scene {
     }
 
     async create() {
+        this._isTransitioning = false;
         this.game.events.emit('chat-room-change', `location:${this.landmarkId}`);
         const { width, height } = this.scale;
-
-        // Clean sky background
-        this.add.rectangle(width / 2, height / 2, width, height, 0x5cc2f2);
+        playTransitionIn(this);
 
         // Fetch location details
         let landmarkData = null;
@@ -25,6 +25,15 @@ export class LocationScene extends Scene {
             console.warn('Error fetching landmark data:', err);
         }
 
+        const backgroundKey = landmarkData?.background;
+        if (backgroundKey && this.textures.exists(backgroundKey)) {
+            this.add.image(width / 2, height / 2, backgroundKey)
+                .setDisplaySize(width, height)
+                .setDepth(0);
+        } else {
+            this.add.rectangle(width / 2, height / 2, width, height, 0x5cc2f2).setDepth(0);
+        }
+
         // Custom name override map
         const NAME_MAP = {
             'football-stadium': 'THE SWAMP',
@@ -32,7 +41,9 @@ export class LocationScene extends Scene {
             'library-west': 'LIB WEST',
             'marston-library': 'MARSTON',
             'student-union': 'REITZ UNION',
-            'century-tower': 'CENTURY TOWER'
+            'century-tower': 'CENTURY TOWER',
+            'plaza-of-the-americas': 'PLAZA OF THE AMERICAS',
+            'lake-alice': 'LAKE ALICE'
         };
 
         const rawName = landmarkData?.name || this.landmarkId;
@@ -45,21 +56,24 @@ export class LocationScene extends Scene {
             color: '#ffffff',
             backgroundColor: 'rgba(30, 41, 59, 0.85)',
             padding: { x: 20, y: 8 }
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setDepth(10);
 
         // 2. Back to Map Button
-        const backBtn = this.add.text(120, 50, '← Back to Map', {
-            fontFamily: 'Pixelify Sans, sans-serif',
-            fontSize: '18px',
-            color: '#ffffff',
-            backgroundColor: '#0021A5',
-            padding: { x: 12, y: 6 }
-        })
-        .setInteractive({ useHandCursor: true })
-        .on('pointerdown', () => this.scene.start('Game'));
-
-        backBtn.on('pointerover', () => backBtn.setStyle({ color: '#ffbb00' }));
-        backBtn.on('pointerout', () => backBtn.setStyle({ color: '#ffffff' }));
+        createPixelButton(this, 116, 46, 'BACK', {
+            variant: 'blue',
+            width: 136,
+            height: 42,
+            fontSize: 14,
+            depth: 10,
+            onClick: () => {
+                playTransitionOut(this, () => {
+                    this.scene.start('LoadingScene', {
+                        targetScene: 'Game',
+                        subtitle: 'Campus'
+                    });
+                });
+            }
+        });
 
         // 3. Dialogue / Info Popup Box at bottom
         this.dialogueBox = this.add.text(width / 2, height - 70, 'Click any interactable object to inspect it!', {
@@ -70,14 +84,15 @@ export class LocationScene extends Scene {
             padding: { x: 24, y: 12 },
             align: 'center',
             wordWrap: { width: width - 160 }
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setDepth(10);
 
         // 4. Render Interactables
         const interactables = landmarkData?.interactables || [];
         interactables.forEach((item) => {
             // Interactive pedestal
             const itemBox = this.add.rectangle(item.x, item.y, 74, 74, 0xf37021)
-                .setInteractive({ useHandCursor: true });
+                .setInteractive({ useHandCursor: true })
+                .setDepth(5);
 
             const label = this.add.text(item.x, item.y - 48, item.label, {
                 fontFamily: 'Pixelify Sans, sans-serif',
@@ -85,7 +100,7 @@ export class LocationScene extends Scene {
                 color: '#ffffff',
                 backgroundColor: '#0021A5',
                 padding: { x: 8, y: 4 }
-            }).setOrigin(0.5);
+            }).setOrigin(0.5).setDepth(5);
 
             // Hover effects
             itemBox.on('pointerover', () => {

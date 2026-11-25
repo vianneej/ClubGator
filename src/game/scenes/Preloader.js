@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { buildLoadingBackdrop, playTransitionOut } from '../utils/pixelUi';
 import grassImg from '../../assets/grass_2d_strip_clean.png';
 import skyImg from '../../assets/sky_background.png';
 import gatorStandingImg from '../../assets/GatorStanding.png';
@@ -6,6 +7,14 @@ import gatorLeft1Img from '../../assets/GatorLeft1.png';
 import gatorLeft2Img from '../../assets/GatorLeft2.png';
 import gatorRight1Img from '../../assets/GatorRight1.png';
 import gatorRight2Img from '../../assets/GatorRight2.png';
+import reitzUnionImg from '../../assets/reitz_union_pixel.jpg';
+import centuryTowerImg from '../../assets/century_tower_pixel.jpg';
+import libraryWestImg from '../../assets/library_west_pixel.jpg';
+import plazaAmericasImg from '../../assets/plaza_americas_pixel.jpg';
+import marstonLibraryImg from '../../assets/marston_library_pixel.jpg';
+import lakeAliceImg from '../../assets/lake_alice_pixel.jpg';
+import footballStadiumImg from '../../assets/football_stadium_pixel.jpg';
+import sportsArenaImg from '../../assets/sports_arena_pixel.jpg';
 
 export class Preloader extends Scene
 {
@@ -16,21 +25,15 @@ export class Preloader extends Scene
 
     init ()
     {
-        //  We loaded this image in our Boot Scene, so we can display it here
-        this.add.image(512, 384, 'background');
+        this._isTransitioning = false;
+        this._startedAt = Date.now();
+        const { updateProgress } = buildLoadingBackdrop(this, {
+            subtitle: 'Entering Campus',
+            showBar: true
+        });
 
-        //  A simple progress bar. This is the outline of the bar.
-        this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
-
-        //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
-        const bar = this.add.rectangle(512-230, 384, 4, 28, 0xffffff);
-
-        //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
         this.load.on('progress', (progress) => {
-
-            //  Update the progress bar (our bar is 464px wide, so 100% = 464px)
-            bar.width = 4 + (460 * progress);
-
+            updateProgress(progress);
         });
     }
 
@@ -48,10 +51,26 @@ export class Preloader extends Scene
         this.load.image('gator-left-2', gatorLeft2Img);
         this.load.image('gator-right-1', gatorRight1Img);
         this.load.image('gator-right-2', gatorRight2Img);
+        this.load.image('reitz-union', reitzUnionImg);
+        this.load.image('century-tower', centuryTowerImg);
+        this.load.image('library-west', libraryWestImg);
+        this.load.image('plaza-americas', plazaAmericasImg);
+        this.load.image('marston-library', marstonLibraryImg);
+        this.load.image('lake-alice', lakeAliceImg);
+        this.load.image('football-stadium', footballStadiumImg);
+        this.load.image('sports-arena', sportsArenaImg);
     }
 
     create ()
     {
-        this.scene.start('MainMenu');
+        const elapsed = Date.now() - (this._startedAt || Date.now());
+        // keep total preloading time (including exit transition) under 4s max
+        const remainingDelay = Math.max(0, Math.min(650, 3350 - elapsed));
+
+        this.time.delayedCall(remainingDelay, () => {
+            playTransitionOut(this, () => {
+                this.scene.start('Game');
+            });
+        });
     }
 }
