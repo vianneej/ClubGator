@@ -15,6 +15,14 @@ import marstonLibraryImg from '../../assets/marston_library_pixel.jpg';
 import lakeAliceImg from '../../assets/lake_alice_pixel.jpg';
 import footballStadiumImg from '../../assets/football_stadium_pixel.jpg';
 import sportsArenaImg from '../../assets/sports_arena_pixel.jpg';
+import GlassesImg from '../../assets/Glasses.png';
+import SunglassesImg from '../../assets/Sunglasses.png';
+import WizardHatImg from '../../assets/WizardHat.png';
+import BeanieImg from '../../assets/Beanie.png';
+import BaseballCapImg from '../../assets/BaseballCap.png';
+import CrownImg from '../../assets/Crown.png';
+import MonocleImg from '../../assets/Monocle.png';
+import BowImg from '../../assets/Bow.png';
 
 export class Preloader extends Scene
 {
@@ -59,6 +67,16 @@ export class Preloader extends Scene
         this.load.image('lake-alice', lakeAliceImg);
         this.load.image('football-stadium', footballStadiumImg);
         this.load.image('sports-arena', sportsArenaImg);
+
+        // Load accessory images
+        this.load.image('Glasses', GlassesImg);
+        this.load.image('Sunglasses', SunglassesImg);
+        this.load.image('WizardHat', WizardHatImg);
+        this.load.image('Beanie', BeanieImg);
+        this.load.image('BaseballCap', BaseballCapImg);
+        this.load.image('Crown', CrownImg);
+        this.load.image('Monocle', MonocleImg);
+        this.load.image('Bow', BowImg);
     }
 
     create ()

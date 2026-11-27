@@ -1,5 +1,27 @@
 /** Placeholder cosmetics until real art lands. IDs are stable for saves. */
 
+import ClearXImg from "../assets/ClearX.png";
+import WizardHatImg from "../assets/WizardHat.png";
+import BeanieImg from "../assets/Beanie.png";
+import BaseballCapImg from "../assets/BaseballCap.png";
+import CrownImg from "../assets/Crown.png";
+import TopHatImg from "../assets/TopHat.png";
+import PartyHatImg from "../assets/PartyHat.png";
+import GlassesImg from "../assets/Glasses.png";
+import SunglassesImg from "../assets/Sunglasses.png";
+import MonocleImg from "../assets/Monocle.png";
+import SquareImg from "../assets/square.png";
+import SkiGoggleImg from "../assets/SkiGoggle.png";
+import BowImg from "../assets/Bow.png";
+import StarSpecsImg from "../assets/star_specs.png";
+import HoodieImg from "../assets/Hoodie.png";
+import TShirtImg from "../assets/TShirt.png";
+import SuitImg from "../assets/Suit.png";
+import RainCoatImg from "../assets/RainCoat.png";
+import LabCoatImg from "../assets/LabCoat.png";
+import JerseyImg from "../assets/Jersey.png";
+import VestImg from "../assets/Vest.png";
+
 export const BODY_COLORS = [
   { id: "green", hex: "#3d9e3a", label: "Green" },
   { id: "navy", hex: "#1f3a6e", label: "Navy" },
@@ -22,40 +44,37 @@ export const CATEGORIES = [
 
 /** 3×3 grid on desktop */
 export const ITEMS_PER_PAGE = 9;
-const NONE = { id: "", label: "None", swatch: "#f0d4dc" };
+
+const NONE = { id: "", label: "Clear", image: ClearXImg };
 export const CATALOG = {
   hat: [
     NONE,
-    { id: "wizard", label: "Wizard hat", swatch: "#7b4bb8" },
-    { id: "beanie", label: "Beanie", swatch: "#3d9e3a" },
-    { id: "cap", label: "Ball cap", swatch: "#5a9e4a" },
-    { id: "bow", label: "Bow", swatch: "#e87aa8" },
-    { id: "crown", label: "Crown", swatch: "#f4d35e" },
-    { id: "top_hat", label: "Top hat", swatch: "#2a2a2a" },
-    { id: "propeller", label: "Propeller", swatch: "#e85a3c" },
-    { id: "party", label: "Party hat", swatch: "#2f6fdb" },
-    { id: "visor", label: "Visor", swatch: "#4ecdc4" },
+    { id: "wizard", label: "Wizard hat", swatch: "#7b4bb8", image: WizardHatImg },
+    { id: "beanie", label: "Beanie", swatch: "#3d9e3a", image: BeanieImg },
+    { id: "cap", label: "Ball cap", swatch: "#5a9e4a", image: BaseballCapImg },
+    { id: "bow", label: "Bow", swatch: "#e87aa8", image: BowImg },
+    { id: "crown", label: "Crown", swatch: "#f4d35e", image: CrownImg },
+    { id: "top_hat", label: "Top hat", swatch: "#2a2a2a", image: TopHatImg },
+    { id: "party", label: "Party hat", swatch: "#2f6fdb", image: PartyHatImg },
   ],
   glasses: [
     NONE,
-    { id: "round", label: "Round", swatch: "#5c4033" },
-    { id: "square", label: "Square", swatch: "#2a2a2a" },
-    { id: "sun", label: "Sunglasses", swatch: "#1a1a1a" },
-    { id: "star", label: "Star specs", swatch: "#f4d35e" },
-    { id: "mono", label: "Monocle", swatch: "#c0c0c0" },
-    { id: "ski", label: "Ski goggles", swatch: "#2f6fdb" },
-    { id: "heart", label: "Heart", swatch: "#e87aa8" },
+    { id: "round", label: "Round", swatch: "#5c4033", image: GlassesImg },
+    { id: "square", label: "Square", swatch: "#2a2a2a", image: SquareImg },
+    { id: "sun", label: "Sunglasses", swatch: "#1a1a1a", image: SunglassesImg },
+    { id: "star", label: "Star specs", swatch: "#f4d35e", image: StarSpecsImg },
+    { id: "mono", label: "Monocle", swatch: "#c0c0c0", image: MonocleImg },
+    { id: "ski", label: "Ski goggles", swatch: "#2f6fdb", image: SkiGoggleImg },
   ],
   outfit: [
     NONE,
-    { id: "hoodie", label: "Hoodie", swatch: "#2f6fdb" },
-    { id: "tee", label: "T-shirt", swatch: "#efefef" },
-    { id: "jersey", label: "Jersey", swatch: "#f4a020" },
-    { id: "suit", label: "Suit", swatch: "#2a2a2a" },
-    { id: "overalls", label: "Overalls", swatch: "#3d6eb5" },
-    { id: "raincoat", label: "Raincoat", swatch: "#e85a3c" },
-    { id: "scarf_set", label: "Scarf set", swatch: "#c0392b" },
-    { id: "lab_coat", label: "Lab coat", swatch: "#f5f5f5" },
+    { id: "hoodie", label: "Hoodie", swatch: "#2f6fdb", image: HoodieImg },
+    { id: "tee", label: "T-shirt", swatch: "#efefef", image: TShirtImg },
+    { id: "jersey", label: "Jersey", swatch: "#f4a020", image: JerseyImg },
+    { id: "suit", label: "Suit", swatch: "#2a2a2a", image: SuitImg },
+    { id: "raincoat", label: "Raincoat", swatch: "#e85a3c", image: RainCoatImg },
+    { id: "vest", label: "Vest", swatch: "#2a2a2a", image: VestImg },
+    { id: "lab_coat", label: "Lab coat", swatch: "#f5f5f5", image: LabCoatImg },
   ],
   accessory: [
     NONE,

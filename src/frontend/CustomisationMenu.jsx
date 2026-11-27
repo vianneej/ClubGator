@@ -8,6 +8,7 @@ import {
   ITEMS_PER_PAGE,
   getColorHex,
   getDefaultAppearance,
+  getItem,
 } from "../data/appearanceCatalog";
 import { recolorGatorSrc } from "../utils/recolorGator";
 import GrassGround from "./GrassGround";
@@ -143,11 +144,20 @@ export default function CustomisationMenu({
                     onClick={() => selectItem(item)}
                     title={item.label}
                   >
-                    <span
-                      className="cm-slot-swatch"
-                      style={{ background: item.swatch }}
-                      aria-hidden="true"
-                    />
+                    {item.image ? (
+                      <img
+                        className="cm-slot-image"
+                        src={item.image}
+                        alt={item.label}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <span
+                        className="cm-slot-swatch"
+                        style={{ background: item.swatch }}
+                        aria-hidden="true"
+                      />
+                    )}
                     <span className="cm-slot-label">{item.label}</span>
                   </button>
                 );
@@ -188,6 +198,39 @@ export default function CustomisationMenu({
               alt="Your gator"
               draggable={false}
             />
+            {/* Render accessories on top of gator */}
+            {appearance.hat && (
+              <img
+                className={`cm-accessory cm-accessory-hat ${appearance.hat === 'beanie' ? 'is-beanie' : ''}`}
+                src={getItem("hat", appearance.hat)?.image}
+                alt="Hat"
+                draggable={false}
+              />
+            )}
+            {appearance.glasses && (
+              <img
+                className={`cm-accessory cm-accessory-glasses ${appearance.glasses === 'mono' ? 'is-monocle' : ''}`}
+                src={getItem("glasses", appearance.glasses)?.image}
+                alt="Glasses"
+                draggable={false}
+              />
+            )}
+            {appearance.outfit && (
+              <img
+                className="cm-accessory cm-accessory-outfit"
+                src={getItem("outfit", appearance.outfit)?.image}
+                alt="Outfit"
+                draggable={false}
+              />
+            )}
+            {appearance.accessory && (
+              <img
+                className="cm-accessory cm-accessory-accessory"
+                src={getItem("accessory", appearance.accessory)?.image}
+                alt="Accessory"
+                draggable={false}
+              />
+            )}
           </div>
 
           <label className="cm-username">

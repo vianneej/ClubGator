@@ -5,6 +5,7 @@ import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
 import { LoadingScene } from './scenes/LoadingScene';
 import { LocationScene } from './scenes/LocationScene';
+import { CustomizationScene } from './scenes/CustomizationScene';
 import { AUTO, Game, Scale } from 'phaser';
 
 const config = {
@@ -24,6 +25,7 @@ const config = {
         MainMenu,
         MainGame,
         LocationScene,
+        CustomizationScene,
         GameOver
     ]
 };
