@@ -4,6 +4,7 @@ import RegisterPage from "./frontend/RegisterPage";
 import LoginPage from "./frontend/LoginPage";
 import CustomisationMenu from "./frontend/CustomisationMenu";
 import GrassGround from "./frontend/GrassGround";
+import FriendsPanel from './frontend/FriendsPanel';
 import "./frontend/RegisterPage.css";
 import { auth } from "./firebase";
 import {
@@ -258,6 +259,12 @@ export default function App() {
               )}
             </div>
             <section className="cg-game-actions" aria-label="Game controls">
+              <FriendsPanel
+                currentUser={{
+                  uid: session.user.uid,
+                  username: session.profile?.username || session.user.email,
+                }}
+              />
               <button
                 className="cg-button"
                 type="button"

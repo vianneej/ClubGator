@@ -19,21 +19,17 @@ export async function findUserByUsername(username) {
   const cleanName = username.trim();
   if (!cleanName) return null;
 
-  // Queries the users collection by username
-  const q = query(
-    collection(db, 'users'),
-    where('username', '==', cleanName)
-  );
+  const usernameKey = cleanName.toLowerCase();
+  const usernameSnap = await getDoc(doc(db, 'usernames', usernameKey));
 
-  const snapshot = await getDocs(q);
-  if (snapshot.empty) {
+  if (!usernameSnap.exists()) {
     return null;
   }
 
-  const userDoc = snapshot.docs[0];
+  const { uid } = usernameSnap.data();
   return {
-    uid: userDoc.id,
-    ...userDoc.data()
+    uid,
+    username: cleanName
   };
 }
 
